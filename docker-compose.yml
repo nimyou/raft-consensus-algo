@@ -1,0 +1,102 @@
+# docker-compose.yml
+version: "3.9"
+
+x-peers: &peers |
+  {"1":"http://node1:8001","2":"http://node2:8002","3":"http://node3:8003","4":"http://node4:8004","5":"http://node5:8005"}
+
+services:
+  node1:
+    build: .
+    container_name: raft-node1
+    environment:
+      NODE_ID: "1"
+      PORT: "8001"
+      PEERS_JSON: *peers
+    ports: ["8001:8001"]
+    volumes: ["node1_data:/app/data"]
+    healthcheck:
+      test: ["CMD-SHELL", "curl -sf http://localhost:8001/admin/health || exit 1"]
+      interval: 3s
+      timeout: 2s
+      retries: 15
+
+  node2:
+    build: .
+    container_name: raft-node2
+    environment:
+      NODE_ID: "2"
+      PORT: "8002"
+      PEERS_JSON: *peers
+    ports: ["8002:8002"]
+    volumes: ["node2_data:/app/data"]
+    depends_on:
+      node1: { condition: service_healthy }
+    healthcheck:
+      test: ["CMD-SHELL", "curl -sf http://localhost:8002/admin/health || exit 1"]
+      interval: 3s
+      timeout: 2s
+      retries: 15
+
+  node3:
+    build: .
+    container_name: raft-node3
+    environment:
+      NODE_ID: "3"
+      PORT: "8003"
+      PEERS_JSON: *peers
+    ports: ["8003:8003"]
+    volumes: ["node3_data:/app/data"]
+    depends_on:
+      node1: { condition: service_healthy }
+      node2: { condition: service_healthy }
+    healthcheck:
+      test: ["CMD-SHELL", "curl -sf http://localhost:8003/admin/health || exit 1"]
+      interval: 3s
+      timeout: 2s
+      retries: 15
+
+  node4:
+    build: .
+    container_name: raft-node4
+    environment:
+      NODE_ID: "4"
+      PORT: "8004"
+      PEERS_JSON: *peers
+    ports: ["8004:8004"]
+    volumes: ["node4_data:/app/data"]
+    depends_on:
+      node1: { condition: service_healthy }
+      node2: { condition: service_healthy }
+      node3: { condition: service_healthy }
+    healthcheck:
+      test: ["CMD-SHELL", "curl -sf http://localhost:8004/admin/health || exit 1"]
+      interval: 3s
+      timeout: 2s
+      retries: 15
+
+  node5:
+    build: .
+    container_name: raft-node5
+    environment:
+      NODE_ID: "5"
+      PORT: "8005"
+      PEERS_JSON: *peers
+    ports: ["8005:8005"]
+    volumes: ["node5_data:/app/data"]
+    depends_on:
+      node1: { condition: service_healthy }
+      node2: { condition: service_healthy }
+      node3: { condition: service_healthy }
+      node4: { condition: service_healthy }
+    healthcheck:
+      test: ["CMD-SHELL", "curl -sf http://localhost:8005/admin/health || exit 1"]
+      interval: 3s
+      timeout: 2s
+      retries: 15
+
+volumes:
+  node1_data:
+  node2_data:
+  node3_data:
+  node4_data:
+  node5_data:
