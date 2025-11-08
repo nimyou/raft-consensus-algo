@@ -1,12 +1,3 @@
----
-output:
-  html_document: default
-  word_document: default
-  pdf_document: default
----
-
-
-
 A Python implementation of the Raft consensus algorithm for distributed systems, featuring leader election, log replication, and fault tolerance.
 
 ### Overview
