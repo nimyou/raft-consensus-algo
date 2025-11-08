@@ -1,16 +1,8 @@
 ---
-title: "Raft Consensus Implementation"
-author: "Nimrah Ashfaq (Regn No: 9570)"
 output:
   html_document: default
   word_document: default
-  pdf_document:
-    latex_engine: xelatex
-header-includes:
-  - \usepackage{fontspec}
-  - \setmainfont{TeX Gyre Termes}
-  - \setsansfont{TeX Gyre Heros}
-  - \setmonofont{DejaVu Sans Mono}
+  pdf_document: default
 ---
 
 
